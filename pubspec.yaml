@@ -1,0 +1,13 @@
+name: unsplash_api
+description: Unsplash API access without an API key.
+version: 1.0.0
+repository: https://github.com/tytydraco/unsplash_api
+
+environment:
+  sdk: ^3.3.2
+
+dev_dependencies:
+  test: ^1.16.0
+  very_good_analysis: any
+dependencies:
+  http: ^1.1.0
