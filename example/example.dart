@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
 import 'package:unsplash_api/unsplash_api.dart';
 
 Future<void> main() async {
@@ -7,5 +10,10 @@ Future<void> main() async {
     print(image.description);
     print(image.creationDate);
     print(image.imageUrls.raw);
+
+    final uri = Uri.parse(image.imageUrls.raw);
+    final response = await http.get(uri);
+    final file = File('${uri.pathSegments.last}.jpeg');
+    await file.writeAsBytes(response.bodyBytes);
   }
 }
