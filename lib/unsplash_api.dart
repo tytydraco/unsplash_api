@@ -53,6 +53,10 @@ Stream<UnsplashImage> getPhotos(
 
     final req = await get(uri);
     final json = jsonDecode(req.body) as Map<String, dynamic>;
+
+    // Handle zero results.
+    if (json['results'] == null) break;
+
     final results =
         (json['results'] as List<dynamic>).cast<Map<String, dynamic>>();
     final firstImage = results.first;
