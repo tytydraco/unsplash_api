@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:unsplash_api/unsplash_api.dart';
 
 ArgResults _parseArgs(List<String> args) {
   final argParser = ArgParser();
@@ -30,6 +31,11 @@ ArgResults _parseArgs(List<String> args) {
 Future<void> main(List<String> args) async {
   // Get results.
   final results = _parseArgs(args);
+  final query = results.rest.join(' ');
 
   final number = int.parse(results['number'] as String);
+
+  await getPhotos(query, number).forEach((photo) {
+    stdout.writeln('[*] ${photo.slug}');
+  });
 }

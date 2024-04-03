@@ -36,18 +36,19 @@ UnsplashImage convertJsonToImage(Map<String, dynamic> json) {
 }
 
 /// Returns a list of [UnsplashImage]s.
-Future<List<UnsplashImage>> getPhotos(
+Stream<UnsplashImage> getPhotos(
   String query,
   int count, {
   bool includeWatermarked = false,
-}) async {
-  final unsplashImages = <UnsplashImage>[];
+}) async* {
+  var completed = 0;
+  var page = 0;
 
-  for (var i = 1; i < count; i++) {
+  while (completed < count) {
     final uri = Uri.http('unsplash.com', '/napi/search/photos', {
       'per_page': '1',
       'query': query,
-      'page': '$i',
+      'page': '${page++}',
     });
 
     final req = await get(uri);
@@ -57,12 +58,15 @@ Future<List<UnsplashImage>> getPhotos(
     final firstImage = results.first;
     final unsplashImage = convertJsonToImage(firstImage);
 
+    // Ensure that we still provide the correct number of photos if they are
+    // watermarked.
     if (!includeWatermarked) {
-      if (unsplashImage.isPlus || unsplashImage.isPremium) continue;
+      if (unsplashImage.isPlus || unsplashImage.isPremium) {
+        continue;
+      }
     }
 
-    unsplashImages.add(unsplashImage);
+    completed++;
+    yield unsplashImage;
   }
-
-  return unsplashImages;
 }
