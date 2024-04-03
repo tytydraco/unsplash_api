@@ -23,6 +23,11 @@ ArgResults _parseArgs(List<String> args) {
       abbr: 'n',
       defaultsTo: '1',
       help: 'The number of photos to download.',
+    )
+    ..addFlag(
+      'watermarked',
+      abbr: 'w',
+      help: 'Include watermarked (premium or plus) photos.',
     );
 
   return argParser.parse(args);
@@ -34,8 +39,13 @@ Future<void> main(List<String> args) async {
   final query = results.rest.join(' ');
 
   final number = int.parse(results['number'] as String);
+  final watermarked = results['watermarked'] as bool;
 
-  await getPhotos(query, number).forEach((photo) {
+  await getPhotos(
+    query,
+    number,
+    includeWatermarked: watermarked,
+  ).forEach((photo) {
     stdout.writeln('[*] ${photo.slug}');
   });
 }
