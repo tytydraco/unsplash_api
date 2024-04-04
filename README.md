@@ -24,3 +24,7 @@ unsplash -h
 -r, --[no-]overwrite      Whether or not to overwrite existing downloads.
 -v, --[no-]verbose        Provide logging.
 ```
+
+# Example
+
+`unsplash -d "~/Downloads" -n 50 -- Green Forest`
